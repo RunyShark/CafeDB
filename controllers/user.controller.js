@@ -1,18 +1,16 @@
 const bcryptjs = require("bcryptjs");
-const { validationResult } = require("express-validator");
 const { response, request } = require("express");
 const Usuario = require("../models/usuario");
 
+//*
 const usuarioGet = (req, res = response) => {
   res.json({
     msg: "Buenas",
   });
 };
+
+//*
 const usuarioPost = async (req = request, res = response) => {
-  const errosMidelWare = validationResult(req);
-  if (!errosMidelWare.isEmpty()) {
-    return res.status(400).json(errosMidelWare);
-  }
   const { nombre, correo, password, img, rol, estado, google } = req.body;
 
   if (!nombre || !correo || !password) {
@@ -50,6 +48,7 @@ const usuarioPost = async (req = request, res = response) => {
   }
 };
 
+//*
 module.exports = {
   usuarioGet,
   usuarioPost,
