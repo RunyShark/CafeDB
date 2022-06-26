@@ -60,8 +60,17 @@ const usuarioPut = async (req = request, res = response) => {
   }
 };
 //*
+
+const borrarUser = async (req = request, res = response) => {
+  const { id } = req.params;
+
+  const user = await Usuario.findByIdAndUpdate(id, { estado: false });
+  res.status(202).json({ msg: "Usuario eliminado correctamente", user });
+};
+//*
 module.exports = {
   usuarioGet,
   usuarioPost,
   usuarioPut,
+  borrarUser,
 };

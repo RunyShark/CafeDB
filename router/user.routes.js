@@ -5,6 +5,7 @@ const {
   usuarioGet,
   usuarioPost,
   usuarioPut,
+  borrarUser,
 } = require("../controllers/user.controller");
 const {
   dbValideitor,
@@ -15,6 +16,15 @@ require("colors");
 const router = Router();
 
 router.get("/", usuarioGet);
+router.delete(
+  "/:id",
+  [
+    check("id", "No es un ID valido").isMongoId(),
+    check("id").custom(userExisteID),
+    validarCampos,
+  ],
+  borrarUser
+);
 router.put(
   "/:id",
   [
