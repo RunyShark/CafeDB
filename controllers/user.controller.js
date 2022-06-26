@@ -11,20 +11,11 @@ const usuarioGet = (req, res = response) => {
 
 //*
 const usuarioPost = async (req = request, res = response) => {
-  const { nombre, correo, password, img, rol, estado, google } = req.body;
+  const { nombre, correo, password, rol } = req.body;
 
   if (!nombre || !correo || !password) {
     const error = new Error("Nombre, correo y cotraseña son campos requeridos");
     return res.status(403).json({ msg: error.message });
-  }
-
-  const CheckDuplicateEmail = await Usuario.findOne({ correo });
-
-  if (CheckDuplicateEmail) {
-    const error = new Error(
-      "El correo ya se encuentra registrado, intente con otro correo"
-    );
-    return res.status(400).json({ msg: error.message });
   }
 
   try {
@@ -40,8 +31,7 @@ const usuarioPost = async (req = request, res = response) => {
     await usuario.save();
 
     res.json({
-      id: usuario._id,
-      nombre: usuario.nombre,
+      usuario,
     });
   } catch (error) {
     console.log(error.message);
