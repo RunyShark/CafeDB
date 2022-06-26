@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const { dbConnection } = require("../dataBase/config");
 require("colors");
 
 class Server {
@@ -9,10 +10,17 @@ class Server {
     this.port = process.env.PORT_SEV;
     this.usuariosRoutePath = "/api/usuarios";
 
+    //DB conect
+    this.conectarDB();
+
     // Midelwares
     this.midelwares();
+
     //Rutas de mi app
     this.routet();
+  }
+  async conectarDB() {
+    await dbConnection();
   }
   midelwares() {
     this.app.use(cors());
