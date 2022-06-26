@@ -13,11 +13,6 @@ const usuarioGet = (req, res = response) => {
 const usuarioPost = async (req = request, res = response) => {
   const { nombre, correo, password, rol } = req.body;
 
-  if (!nombre || !correo || !password) {
-    const error = new Error("Nombre, correo y cotraseña son campos requeridos");
-    return res.status(403).json({ msg: error.message });
-  }
-
   try {
     const usuario = await Usuario({
       nombre,
