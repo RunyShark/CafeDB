@@ -1,7 +1,24 @@
 const { request, response } = require("express");
 
-const galletas = (req = request, res = response) => {
+const categoriaGet = (req = request, res = response) => {
   res.json({ msg: "Oreo" });
 };
 
-module.exports = galletas;
+const categoriaPost = (req = request, res = response) => {
+  res.json({ msg: "Oreo" });
+};
+
+const categoriaPut = (req = request, res = response) => {
+  res.json({ msg: "Oreo" });
+};
+
+const categoriaDelete = (req = request, res = response) => {
+  res.json({ msg: "Oreo" });
+};
+
+module.exports = {
+  categoriaGet,
+  categoriaPost,
+  categoriaPut,
+  categoriaDelete,
+};

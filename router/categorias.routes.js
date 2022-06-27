@@ -1,10 +1,18 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 const { validarCampos } = require("../middlewares/validar-campos");
-const galletas = require("../controllers/categorias.controller");
+const {
+  categoriaGet,
+  categoriaPost,
+  categoriaPut,
+  categoriaDelete,
+} = require("../controllers/categorias.controller");
 
 const router = Router();
 
-router.get("/", galletas);
+router.get("/", categoriaGet);
+router.post("/", categoriaPost);
+router.put("/", categoriaPut);
+router.delete("/", categoriaDelete);
 
 module.exports = router;

@@ -9,9 +9,9 @@ class Server {
     this.app = express();
     this.port = process.env.PORT_SEV;
     this.paths = {
-      RoutePath: "/api/usuarios",
       RoutePathAuth: "/api/auth",
       RoutePathcategorias: "/api/categorias",
+      RoutePath: "/api/usuarios",
     };
 
     //DB conect
