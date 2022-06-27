@@ -10,6 +10,7 @@ class Server {
     this.port = process.env.PORT_SEV;
     this.usuariosRoutePath = "/api/usuarios";
     this.usuariosRoutePathAuth = "/api/auth";
+    this.usuariosRoutePathcategorias = "/api/categorias";
 
     //DB conect
     this.conectarDB();
@@ -34,6 +35,10 @@ class Server {
   routet() {
     this.app.use(this.usuariosRoutePath, require("../router/user.routes"));
     this.app.use(this.usuariosRoutePathAuth, require("../router/login.routes"));
+    this.app.use(
+      this.usuariosRoutePathcategorias,
+      require("../router/categorias.routes")
+    );
   }
   lister() {
     this.app.listen(this.port, (err) => {
