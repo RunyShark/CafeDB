@@ -10,9 +10,9 @@ const { validarCampos } = require("../middlewares/validar-campos");
 
 const router = Router();
 
-router.use("/", get);
-router.use("/", post);
-router.use("/", put);
-router.use("/", delee);
+router.get("/", get);
+router.post("/", post);
+router.put("/", put);
+router.delete("/", delee);
 
 module.exports = router;
