@@ -13,11 +13,14 @@ const obtenerCategorias = async (req = request, res = response) => {
     return res.status(400).json({ msg: error.message });
   }
   try {
-    const respuesta = await Promise.all([
+    const [total, categorias] = await Promise.all([
       Categoria.countDocuments(query),
-      Categoria.find(query).skip(Number(desde)).limit(Number(limit)),
+      Categoria.find(query)
+        .populate("usuario", "nombre")
+        .skip(Number(desde))
+        .limit(Number(limit)),
     ]);
-    res.json({ msg: "Categorias", respuesta });
+    res.json({ msg: "Categorias", total, categorias });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ msg: `Algo salio mal ${error.message}` });
@@ -29,7 +32,10 @@ const obtenerCategorias = async (req = request, res = response) => {
 const obtenerCategoria = async (req = request, res = response) => {
   const { id } = req.params;
   try {
-    const idCategoria = await Categoria.findById(id);
+    const idCategoria = await Categoria.findById(id).populate(
+      "usuario",
+      "nombre"
+    );
     res.json({ msg: "Categoria por ID", idCategoria });
   } catch (error) {
     console.log(error);

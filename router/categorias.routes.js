@@ -9,13 +9,19 @@ const {
   actutalizarCategorioa,
   borrarCategoria,
 } = require("../controllers/categorias.controller");
+const { validarRolAdmin } = require("../middlewares/validar-Rol");
+const existeCategoria = require("../helpers/existeCategoria");
 
 const router = Router();
 
 router.get("/", obtenerCategorias);
 router.get(
   "/:id",
-  [check("id", "El ID no es valido").isMongoId(), validarCampos],
+  [
+    check("id", "El ID no es valido").isMongoId(),
+    check("id").custom(existeCategoria),
+    validarCampos,
+  ],
   obtenerCategoria
 );
 router.post(
@@ -31,6 +37,7 @@ router.put(
   "/:id",
   [
     check("id", "El ID no es valido").isMongoId(),
+    check("id").custom(existeCategoria),
     check("nombre", "El nombre es un campo obligatorio").not().isEmpty(),
     validarCampos,
   ],
@@ -38,7 +45,12 @@ router.put(
 );
 router.delete(
   "/:id",
-  [check("id", "El ID no es valido").isMongoId(), validarCampos],
+  [
+    tieneRole("ADMIN_ROLE"),
+    check("id", "El ID no es valido").isMongoId(),
+    check("id").custom(existeCategoria),
+    validarCampos,
+  ],
   borrarCategoria
 );
 
