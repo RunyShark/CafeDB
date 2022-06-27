@@ -44,14 +44,38 @@ const login = async (req = request, res = response) => {
 const googleSingIn = async (req = request, res = response, next) => {
   const { id_token } = req.body;
   try {
-    const googleUser = await googleVerify(id_token);
-    console.log(googleUser);
+    const { nombre, img, correo } = await googleVerify(id_token);
+
+    let usuario = await Usuario.findOne({ correo });
+
+    if (!usuario) {
+      const data = {
+        nombre,
+        correo,
+        password: ":P",
+        img,
+        rol: "USER_ROLE",
+        google: true,
+      };
+      usuario = new Usuario(data);
+      await usuario.save();
+    }
+    if (!usuario.estado) {
+      const error = new Error("Usuario baneado");
+      return res.status(401).json({ msg: error.message });
+    }
+    const token = await generadorJWT(usuario.id);
+
     res.json({
-      msg: "token de google",
-      id_token,
+      usuario,
+      token,
     });
   } catch (error) {
     console.log(error);
+    const errorr = new Error("El token no se pudo verificar");
+    return res.status(400).json({
+      msg: errorr.message,
+    });
   }
 };
 //*
