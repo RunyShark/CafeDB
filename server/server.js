@@ -8,9 +8,11 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT_SEV;
-    this.usuariosRoutePath = "/api/usuarios";
-    this.usuariosRoutePathAuth = "/api/auth";
-    this.usuariosRoutePathcategorias = "/api/categorias";
+    this.paths = {
+      RoutePath: "/api/usuarios",
+      RoutePathAuth: "/api/auth",
+      RoutePathcategorias: "/api/categorias",
+    };
 
     //DB conect
     this.conectarDB();
@@ -33,10 +35,10 @@ class Server {
     this.app.use(express.static("public"));
   }
   routet() {
-    this.app.use(this.usuariosRoutePath, require("../router/user.routes"));
-    this.app.use(this.usuariosRoutePathAuth, require("../router/login.routes"));
+    this.app.use(this.paths.RoutePath, require("../router/user.routes"));
+    this.app.use(this.paths.RoutePathAuth, require("../router/login.routes"));
     this.app.use(
-      this.usuariosRoutePathcategorias,
+      this.paths.RoutePathcategorias,
       require("../router/categorias.routes")
     );
   }
