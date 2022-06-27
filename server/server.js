@@ -12,6 +12,7 @@ class Server {
       RoutePathAuth: "/api/auth",
       RoutePathcategorias: "/api/categorias",
       RoutePath: "/api/usuarios",
+      RoutePathProductos: "/api/productos",
     };
 
     //DB conect
@@ -37,6 +38,10 @@ class Server {
   routet() {
     this.app.use(this.paths.RoutePath, require("../router/user.routes"));
     this.app.use(this.paths.RoutePathAuth, require("../router/login.routes"));
+    this.app.use(
+      this.paths.RoutePathProductos,
+      require("../router/productos.routes")
+    );
     this.app.use(
       this.paths.RoutePathcategorias,
       require("../router/categorias.routes")

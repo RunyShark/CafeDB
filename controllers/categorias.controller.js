@@ -46,7 +46,11 @@ const obtenerCategoria = async (req = request, res = response) => {
 //actutalizarCategorioa
 const actutalizarCategorioa = async (req = request, res = response) => {
   const { id } = req.params;
-  const nombre = req.body.nombre.toUpperCase();
+  const { estado, usuario, ...data } = req.body;
+  const nombre = data.nombre.toUpperCase();
+  data.usuario = req.usuario;
+
+  console.log(`Soy yo`, req.usuario);
 
   const existeNombre = await Categoria.findOne({ nombre });
 
@@ -61,7 +65,7 @@ const actutalizarCategorioa = async (req = request, res = response) => {
     const updateCategotria = await Categoria.findById(id);
     updateCategotria.nombre = nombre;
     await updateCategotria.save();
-    res.status(201).json({ msg: "update categoria", updateCategotria });
+    res.status(201).json({ msg: "update categoria", data, updateCategotria });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: `Algo salio mal ${error.message}` });

@@ -9,7 +9,7 @@ const {
   actutalizarCategorioa,
   borrarCategoria,
 } = require("../controllers/categorias.controller");
-const { validarRolAdmin } = require("../middlewares/validar-Rol");
+const { tieneRole } = require("../middlewares/validar-Rol");
 const existeCategoria = require("../helpers/existeCategoria");
 
 const router = Router();
@@ -36,6 +36,7 @@ router.post(
 router.put(
   "/:id",
   [
+    validarJWT,
     check("id", "El ID no es valido").isMongoId(),
     check("id").custom(existeCategoria),
     check("nombre", "El nombre es un campo obligatorio").not().isEmpty(),
