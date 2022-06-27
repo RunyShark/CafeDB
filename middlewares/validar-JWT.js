@@ -8,9 +8,10 @@ const validarJWT = async (req = request, res = response, next) => {
   if (!token) {
     const error = new Error("No hay token en la peticion");
     return res.status(401).json({
-      msg: error,
+      msg: error.message,
     });
   }
+
   try {
     const { uid } = jtw.verify(token, process.env.PRIVATE_KEY);
     const usuario = await Usuario.findById(uid).select(

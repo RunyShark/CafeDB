@@ -1,28 +1,113 @@
 const { request, response } = require("express");
-//obtener todas las categotias
-//obtener categoria por id
+const { Categoria } = require("../models");
+
+//rutas midelware personalizado para validar id -existecategoria si la categoria no existe error
+//**
+//obtenerCategorias -paginado -total -populate
+const obtenerCategorias = async (req = request, res = response) => {
+  const categorias = await Categoria.find();
+  const { limit = 5, desde = 0 } = req.body;
+  const query = { estado: true };
+  if (!categorias) {
+    const error = new Error("No hay categorias en la DB");
+    return res.status(400).json({ msg: error.message });
+  }
+  try {
+    const respuesta = await Promise.all([
+      Categoria.countDocuments(query),
+      Categoria.find(query).skip(Number(desde)).limit(Number(limit)),
+    ]);
+    res.json({ msg: "Categorias", respuesta });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: `Algo salio mal ${error.message}` });
+  }
+};
+
+//**
+//obtenerCategorias -pupulate -{}
+const obtenerCategoria = async (req = request, res = response) => {
+  const { id } = req.params;
+  try {
+    const idCategoria = await Categoria.findById(id);
+    res.json({ msg: "Categoria por ID", idCategoria });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: `Algo salio mal ${error.message}` });
+  }
+};
+//*
+//actutalizarCategorioa
+const actutalizarCategorioa = async (req = request, res = response) => {
+  const { id } = req.params;
+  const nombre = req.body.nombre.toUpperCase();
+
+  const existeNombre = await Categoria.findOne({ nombre });
+
+  if (existeNombre) {
+    const error = new Error(
+      `El nombre: ${nombre} ya existe, intenta con otro nombre`
+    );
+    return res.status(400).json({ msg: error.message });
+  }
+
+  try {
+    const updateCategotria = await Categoria.findById(id);
+    updateCategotria.nombre = nombre;
+    await updateCategotria.save();
+    res.status(201).json({ msg: "update categoria", updateCategotria });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: `Algo salio mal ${error.message}` });
+  }
+};
+//*
+//borrarCategoria -estado false
+const borrarCategoria = async (req = request, res = response) => {
+  const { id } = req.params;
+
+  try {
+    const borrarCategoria = await Categoria.findById(id);
+    borrarCategoria.estado = false;
+    borrarCategoria.save();
+    res.status(201).json({ msg: "Categoria borrada", borrarCategoria });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: `Algo salio mal ${error.message}` });
+  }
+};
+//*
 //crear categoria -privado-cualquier persona con token valido
-//actualizar -privado-cualquier token valido
-//borrar una categoria -admin
-const categoriaGet = (req = request, res = response) => {
-  res.json({ msg: "Oreo" });
-};
+const categoriaPost = async (req = request, res = response) => {
+  const nombre = req.body.nombre.toUpperCase();
 
-const categoriaPost = (req = request, res = response) => {
-  res.json({ msg: "Oreo" });
-};
+  const categoriaDb = await Categoria.findOne({ nombre });
+  if (categoriaDb) {
+    const error = new Error(`La categoria ${nombre} ya existe en la DB`);
+    return res.status(400).json({ msg: error.message });
+  }
 
-const categoriaPut = (req = request, res = response) => {
-  res.json({ msg: "Oreo" });
-};
+  try {
+    const data = {
+      nombre,
+      usuario: req.usuario._id,
+    };
 
-const categoriaDelete = (req = request, res = response) => {
-  res.json({ msg: "Oreo" });
+    const categoria = new Categoria(data);
+    await categoria.save();
+
+    res
+      .status(201)
+      .json({ msg: "Categoria agregada correctamente", categoria });
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 module.exports = {
-  categoriaGet,
+  obtenerCategorias,
   categoriaPost,
-  categoriaPut,
-  categoriaDelete,
+  obtenerCategoria,
+  actutalizarCategorioa,
+  borrarCategoria,
 };
