@@ -1,5 +1,6 @@
 const Role = require("../models/role");
 const Usuario = require("../models/usuario");
+
 const dbValideitor = async (rol = "") => {
   const existeRol = await Role.findOne({ rol });
   if (!existeRol) {
@@ -7,12 +8,12 @@ const dbValideitor = async (rol = "") => {
   }
 };
 
-const emailExiste = async (email = "") => {
-  const CheckDuplicateEmail = await Usuario.findOne({ email });
-
+const emailExiste = async (correo = "") => {
+  const CheckDuplicateEmail = await Usuario.findOne({ correo });
+  console.log(CheckDuplicateEmail);
   if (CheckDuplicateEmail) {
     throw new Error(
-      `El correo: ${email} ya se encuentra registrado, intente con otro correo`
+      `El correo: ${correo} ya se encuentra registrado, intente con otro correo`
     );
   }
 };

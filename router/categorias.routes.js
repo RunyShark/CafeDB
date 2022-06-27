@@ -11,6 +11,7 @@ const {
 const router = Router();
 
 router.get("/", categoriaGet);
+router.get("/:id", categoriaGet);
 router.post("/", categoriaPost);
 router.put("/", categoriaPut);
 router.delete("/", categoriaDelete);
