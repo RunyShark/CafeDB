@@ -40,6 +40,16 @@ const login = async (req = request, res = response) => {
   }
 };
 //*
+const googleSingIn = async (req = request, res = response, next) => {
+  const { id_token } = req.body;
+
+  res.json({
+    msg: "token de google",
+    id_token,
+  });
+};
+//*
 module.exports = {
   login,
+  googleSingIn,
 };
