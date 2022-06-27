@@ -2,6 +2,7 @@ const { request, response } = require("express");
 const Usuario = require("../models/usuario");
 const bcryptjs = require("bcryptjs");
 const generadorJWT = require("../helpers/generadorJWT");
+const googleVerify = require("../helpers/google-verify");
 
 //*
 const login = async (req = request, res = response) => {
@@ -42,11 +43,16 @@ const login = async (req = request, res = response) => {
 //*
 const googleSingIn = async (req = request, res = response, next) => {
   const { id_token } = req.body;
-
-  res.json({
-    msg: "token de google",
-    id_token,
-  });
+  try {
+    const googleUser = await googleVerify(id_token);
+    console.log(googleUser);
+    res.json({
+      msg: "token de google",
+      id_token,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 //*
 module.exports = {
