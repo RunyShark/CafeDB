@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const fileUpload = require("express-fileUpload");
 const { dbConnection } = require("../dataBase/config");
 require("colors");
 
@@ -9,12 +10,12 @@ class Server {
     this.app = express();
     this.port = process.env.PORT_SEV;
     this.paths = {
-      RoutePathAuth: "/api/auth",
-      RoutePathcategorias: "/api/categorias",
       RoutePath: "/api/usuarios",
-      RoutePathProductos: "/api/productos",
-      RoutePathBuscar: "/api/buscar",
+      RoutePathAuth: "/api/auth",
       RoutePathFiles: "/api/file",
+      RoutePathBuscar: "/api/buscar",
+      RoutePathProductos: "/api/productos",
+      RoutePathcategorias: "/api/categorias",
     };
 
     //DB conect
@@ -33,6 +34,12 @@ class Server {
     this.app.use(cors());
     this.app.use(express.json());
     this.app.use(morgan("dev"));
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+      })
+    );
 
     //Directorio Público
     this.app.use(express.static("public"));
