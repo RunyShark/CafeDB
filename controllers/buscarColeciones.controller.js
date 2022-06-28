@@ -1,7 +1,7 @@
 const { request, response } = require("express");
 const { isValidObjectId } = require("mongoose");
 const modelosPermitidas = ["usuarios", "categoria", "productos", "roles"];
-const { Categoria, Producto, Role, Usuario } = require("../models");
+const { Categoria, Producto, Usuario } = require("../models");
 
 const buscarUsuarios = async (termino = "", res = response) => {
   const esMogoId = isValidObjectId(termino);
@@ -24,7 +24,10 @@ const buscarCategoria = async (termino = "", res = response) => {
   const esMogoId = isValidObjectId(termino);
 
   if (esMogoId) {
-    const categoria = await Categoria.findById(termino);
+    const categoria = await Categoria.findById(termino).populate(
+      "categorias",
+      "nombre"
+    );
     return res.json({ results: categoria ? [categoria] : [] });
   }
 
@@ -38,7 +41,10 @@ const buscarProducto = async (termino = "", res = response) => {
   const esMogoId = isValidObjectId(termino);
 
   if (esMogoId) {
-    const producto = await Producto.findById(termino);
+    const producto = await Producto.findById(termino).populate(
+      "categorias",
+      "nombre"
+    );
     return res.json({ results: producto ? [producto] : [] });
   }
 
@@ -68,8 +74,6 @@ const buscarColeciones = async (req = request, res = response) => {
       break;
     case "productos":
       buscarProducto(termino, res);
-      break;
-    case "roles":
       break;
 
     default:
