@@ -16,6 +16,7 @@ const emailExiste = async (correo = "") => {
       `El correo: ${correo} ya se encuentra registrado, intente con otro correo`
     );
   }
+  return true;
 };
 const userExisteID = async (id = "") => {
   const CuserExisteID = await Usuario.findById(id);
@@ -23,10 +24,22 @@ const userExisteID = async (id = "") => {
   if (!userExisteID) {
     throw new Error(`El usuario con el ID: ${id}, no existe`);
   }
+  return true;
+};
+
+const colecionesPermitidas = (coleccion = "", colecciones = []) => {
+  const incluida = colecciones.includes(coleccion);
+
+  if (!incluida) {
+    throw new Error(`La colecion ${coleccion} no se permitida:${colecciones} `);
+  }
+
+  return true;
 };
 
 module.exports = {
   dbValideitor,
   emailExiste,
   userExisteID,
+  colecionesPermitidas,
 };
