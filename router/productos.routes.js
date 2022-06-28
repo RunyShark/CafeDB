@@ -9,6 +9,7 @@ const {
 } = require("../controllers/productos.controller");
 const { validarCampos } = require("../middlewares/validar-campos");
 const existeProducto = require("../middlewares/existeProducto");
+const existeCategoria = require("../middlewares/existeCategoria");
 const { validarJWT } = require("../middlewares/validar-JWT");
 const { tieneRole } = require("../middlewares/validar-Rol");
 const router = Router();
@@ -27,7 +28,7 @@ router.put(
   "/:id",
   [
     validarJWT,
-    check("id", "El id no es valido").isMongoId(),
+    //check("categoria", "El id no es valido").isMongoId(),
     check("id").custom(existeProducto),
     validarCampos,
   ],
@@ -37,6 +38,7 @@ router.delete(
   "/:id",
   [
     validarJWT,
+    tieneRole("ADMIN_ROLE"),
     check("id", "El id no es valido").isMongoId(),
     check("id").custom(existeProducto),
     validarCampos,
@@ -48,9 +50,8 @@ router.post(
   [
     validarJWT,
     check("nombre", "El campo nombre es obligatorio").not().isEmpty(),
-    check("estado", "El  estado es un campo obligatorio").not().isEmpty(),
-    check("categoria", "El campo categorias es obligatorio").not().isEmpty(),
-    tieneRole("ADMIN_ROLE"),
+    check("categoria", "El campo categorias es obligatorio").isMongoId(),
+    check("categoria").custom(existeCategoria),
     validarCampos,
   ],
   agregarProducto
