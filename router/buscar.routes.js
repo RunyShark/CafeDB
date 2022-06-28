@@ -3,6 +3,6 @@ const { buscar } = require("../controllers/bucar.controller");
 
 const router = Router();
 
-router.get("/", buscar);
+router.get("/:coleccion", buscar);
 
 module.exports = router;
