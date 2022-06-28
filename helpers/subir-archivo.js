@@ -25,7 +25,7 @@ const subirArchivo = (
         return reject(`Algo salio mal ${err.message}`);
       }
 
-      resolve(uploadPath);
+      resolve(nombreTemp);
     });
   });
 };
