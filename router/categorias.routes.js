@@ -10,7 +10,7 @@ const {
   borrarCategoria,
 } = require("../controllers/categorias.controller");
 const { tieneRole } = require("../middlewares/validar-Rol");
-const existeCategoria = require("../helpers/existeCategoria");
+const existeCategoria = require("../middlewares/existeCategoria");
 
 const router = Router();
 
@@ -47,6 +47,7 @@ router.put(
 router.delete(
   "/:id",
   [
+    validarJWT,
     tieneRole("ADMIN_ROLE"),
     check("id", "El ID no es valido").isMongoId(),
     check("id").custom(existeCategoria),

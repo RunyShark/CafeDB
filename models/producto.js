@@ -11,7 +11,7 @@ const ProductoShema = Schema({
     require: true,
   },
   usuario: {
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Usuario",
     require: true,
   },
@@ -20,7 +20,7 @@ const ProductoShema = Schema({
     default: 0,
   },
   categoria: {
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Categoria",
     require: true,
   },

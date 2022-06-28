@@ -50,8 +50,6 @@ const actutalizarCategorioa = async (req = request, res = response) => {
   const nombre = data.nombre.toUpperCase();
   data.usuario = req.usuario;
 
-  console.log(`Soy yo`, req.usuario);
-
   const existeNombre = await Categoria.findOne({ nombre });
 
   if (existeNombre) {
