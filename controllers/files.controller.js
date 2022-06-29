@@ -3,7 +3,7 @@ const fs = require("fs");
 const { request, response } = require("express");
 const { Usuario, Producto } = require("../models");
 const subirArchivo = require("../helpers/subir-archivo");
-
+require("colors");
 const cargarArchivo = async (req = request, res = response) => {
   if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
     const error = new Error("No hay archivos en la peticion");
@@ -85,10 +85,15 @@ const imgEnviar = async (req = request, res = response) => {
       return res.status(500).json({ msg: "Olvide validar esta ruta" });
   }
 
-  res.json({
-    msg: `Imagen del usuiario con el ID ${id}`,
-    img: modelo.img ? modelo.img : "No tiene imagen disponible",
-  });
+  if (modelo.img) {
+    const pathImagen = path.join(__dirname, "../uploads", colecion, modelo.img);
+    if (fs.existsSync(pathImagen)) {
+      return res.sendFile(pathImagen);
+    }
+  }
+  const pathImagen = path.join(__dirname, "../assets/tlacuache-1.jpg");
+
+  res.sendFile(pathImagen);
 };
 module.exports = {
   cargarArchivo,
