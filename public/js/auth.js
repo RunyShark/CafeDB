@@ -19,7 +19,12 @@ miFormulario.addEventListener("submit", (e) => {
     },
   })
     .then((res) => res.json())
-    .then((data) => console.log(data))
+    .then(({ msg, token }) => {
+      if (msg) {
+        return console.log(msg);
+      }
+      localStorage.setItem("token", token);
+    })
     .catch((e) => console.log(e));
 });
 
