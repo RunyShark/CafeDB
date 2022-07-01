@@ -24,6 +24,7 @@ miFormulario.addEventListener("submit", (e) => {
         return console.log(msg);
       }
       localStorage.setItem("token", token);
+      window.location = "chat.html";
     })
     .catch((e) => console.log(e));
 });
@@ -40,6 +41,7 @@ function handleCredentialResponse(response) {
     .then((res) => res.json())
     .then(({ token }) => {
       localStorage.setItem("token", token);
+      window.location = "chat.html";
     })
     .catch(console.warn);
 
