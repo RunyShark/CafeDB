@@ -3,12 +3,16 @@ const cors = require("cors");
 const morgan = require("morgan");
 const fileUpload = require("express-fileUpload");
 const { dbConnection } = require("../dataBase/config");
+const socketControllers = require("../socketControllers/socketControllers");
 require("colors");
 
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT_SEV;
+    this.server = require("http").createServer(this.app);
+    this.io = require("socket.io")(this.server);
+
     this.paths = {
       RoutePath: "/api/usuarios",
       RoutePathAuth: "/api/auth",
@@ -26,6 +30,8 @@ class Server {
 
     //Rutas de mi app
     this.routet();
+
+    this.sockets();
   }
   async conectarDB() {
     await dbConnection();
@@ -62,8 +68,11 @@ class Server {
       require("../router/categorias.routes")
     );
   }
+  sockets() {
+    this.io.on("connection", socketControllers);
+  }
   lister() {
-    this.app.listen(this.port, (err) => {
+    this.server.listen(this.port, (err) => {
       if (err) {
         console.log(`${"Algo salio mal".red} ${err}`);
       }
