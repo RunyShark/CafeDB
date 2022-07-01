@@ -3,7 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const fileUpload = require("express-fileUpload");
 const { dbConnection } = require("../dataBase/config");
-const socketControllers = require("../socketControllers/socketControllers");
+const socketControllers = require("../sockets/socketControllers");
 require("colors");
 
 class Server {
